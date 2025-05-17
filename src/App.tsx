@@ -13,6 +13,7 @@ import FeedbackAnalytics from "./pages/FeedbackAnalytics";
 import Store from "./pages/Store";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import DynamicMap from "@/components/logistics/MapPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/logistics" element={<Logistics />} />
           <Route path="/store" element={<Store />} />
           <Route path="/feedback" element={<Feedback />} />
+          <Route path="/mapvisual" element={<DynamicMap />} />
           <Route path="/feedback-analytics" element={<FeedbackAnalytics />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

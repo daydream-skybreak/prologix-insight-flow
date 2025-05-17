@@ -10,7 +10,8 @@ import {
   Search,
   Scan,
   Settings,
-  LineChart
+  LineChart,
+    Map
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -67,12 +68,17 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
       title: "Scan Products",
       href: "/scan",
       icon: Scan
+    },
+    {
+      title: "Map Visual",
+      href: "/mapvisual",
+      icon: Map
     }
   ];
   
   return (
     <aside className={cn(
-      "fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r bg-background transition-transform duration-300",
+      "z-20 flex w-64 flex-col border-r bg-background transition-transform duration-300",
       isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
     )}>
       <div className="border-b p-4">
