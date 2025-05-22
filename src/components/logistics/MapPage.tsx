@@ -67,16 +67,14 @@ const DynamicMap: React.FC = () => {
     const [routingMessage, setRoutingMessage] = useState<string>('Route will be calculated for the first two locations.'); // Adapted from Canvas (selected code)
 
 
-    const mapCenter: L.LatLngTuple = [9.025, 38.746]; // Latitude, Longitude, typed from Canvas version
+    const mapCenter: L.LatLngTuple = [9.025, 38.746];
 
-    // Function to fetch route from OSRM (from new code, uses routing states)
     const fetchRoute = useCallback(async (start: L.LatLng, end: L.LatLng) => {
         setRoutingLoading(true);
         setRoutingError(null);
-        setPathCoordinates([]); // Clear previous route (using pathCoordinates now)
-        setRoutingMessage('Fetching route...'); // Update message
+        setPathCoordinates([]);
+        setRoutingMessage('Fetching route...');
 
-        // IMPORTANT: This is a DEMO OSRM server. Not for production use.
         const osrmRequestUrl = `http://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&geometries=geojson`;
 
         try {
@@ -126,24 +124,22 @@ const DynamicMap: React.FC = () => {
         };
         fetchInitialLocations();
         */
-        setLoadingLocations(false); // Since locations are static for now
+        setLoadingLocations(false);
 
-        // Attempt to draw a route between the first two locations if they exist
         if (locations.length >= 2) {
             const startLoc = locations[0];
             const endLoc = locations[1];
             const startLatLng = L.latLng(startLoc.lat, startLoc.lng);
             const endLatLng = L.latLng(endLoc.lat, endLoc.lng);
 
-            setStartPoint(startLatLng); // Set start and end points for context, though not directly clicked
+            setStartPoint(startLatLng);
             setEndPoint(endLatLng);
             fetchRoute(startLatLng, endLatLng);
         } else {
             setRoutingMessage("Not enough locations to draw a default route.");
         }
-    }, [locations, fetchRoute]); // fetchRoute is stable due to useCallback
+    }, [locations, fetchRoute]);
 
-    // Click handler for map - can be re-enabled if needed
     const handleMapClick = (latLng: L.LatLng) => {
         if (routingLoading) return;
 
@@ -175,16 +171,15 @@ const DynamicMap: React.FC = () => {
     };
 
 
-    if (loadingLocations) return <p>Loading map data...</p>; // For initial locations if fetched
+    if (loadingLocations) return <p>Loading map data...</p>;
     if (locationsError) return <p>Error loading data: {locationsError}</p>;
 
     return (
-        <div className="flex h-screen overflow-hidden w-sceen"> {/* From new code */}
-            <Sidebar isOpen={true} /> {/* Assuming sidebarOpen state will be managed, for now true */}
+        <div className="flex h-screen overflow-hidden w-sceen">
+            <Sidebar isOpen={true} />
             <div className="flex flex-1 flex-col overflow-hidden">
                 <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)}/>
                 <main className="flex-1 overflow-auto p-4">
-                    {/* UI for routing status - from Canvas version */}
                     <div style={{ padding: '10px', backgroundColor: '#f0f0f0', borderBottom: '1px solid #ccc', marginBottom: '10px' }}>
                         <p style={{ margin: 0, fontWeight: 'bold' }}>Route Planner:</p>
                         <p style={{ margin: '5px 0' }}>{routingMessage}</p>
@@ -200,7 +195,6 @@ const DynamicMap: React.FC = () => {
                     <MapContainer
                         center={mapCenter}
                         zoom={13}
-                        // Style from new code, adjusted to be more reasonable if sidebar/navbar take space
                         style={{ height: 'calc(100vh - 250px)', width: '100%' }}
                     >
                         <TileLayer
@@ -211,7 +205,6 @@ const DynamicMap: React.FC = () => {
                         {/* Uncomment to enable click-to-route */}
                         {/* <MapClickHandler onMapClick={handleMapClick} /> */}
 
-                        {/* Display location markers */}
                         {locations.map((location) => (
                             <Marker key={`loc-${location.id}`} position={[location.lat, location.lng]}>
                                 <Popup>
@@ -230,7 +223,7 @@ const DynamicMap: React.FC = () => {
                         {/* Display the calculated route path */}
                         {pathCoordinates.length > 0 && (
                             <Polyline
-                                pathOptions={{ color: 'blue', weight: 5 }}
+                                pathOptions={{ color: 'blue', weight: 3 }}
                                 positions={pathCoordinates}
                             />
                         )}
